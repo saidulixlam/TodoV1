@@ -15,19 +15,19 @@
     <div class="container my-2">
         <form id="form" class="form-inline mb-3 mx-2">
             <div class="d-flex justify-content-center my-3">
-                <h3>Expense Tracker</h3>
+                <h2>Todo List!</h2>
             </div>
-            <label for="amount" class="form-label">Expense Amount :</label>
-            <input type="number" class="form-control" id="expense" required>
+            <label for="amount" class="form-label">Task Name :</label>
+            <input type="text" class="form-control" id="expense" required>
 
-            <label for="description" class="form-label">Expense Description :</label>
+            <label for="description" class="form-label">Task Description :</label>
             <input type="text" class="form-control" id="description" required>
 
-            <label for="category" class="form-label">Category : </label>
+            <label for="category" class="form-label">Task Category : </label>
             <select name="categories" id="categories" class="form-control-mg">
-                <option value="movies">Movies</option>
-                <option value="food">Food</option>
-                <option value="rent">Rent</option>
+                <option value="movies" selected>Study</option>
+                <option value="food" spellcheck="true">Power Nap</option>
+                <option value="rent">Food & Fun</option>
                 <option value="other">Others</option>
             </select>
             <br>
@@ -35,7 +35,14 @@
         </form>
     </div>
     <div class="container my-3" id="container2">
-        <ul class="list-group" id="list"></ul>
+        <section>
+            <h5>I. Remaining Task :</h5>
+            <ul class="list-group" id="list"></ul>
+        </section>
+        <section>
+            <h5>II. Completed Task :</h5>
+            <ul class="list-group" id="listdone"></ul>
+        </section>
     </div>
     <script src="index.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"
