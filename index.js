@@ -9,7 +9,8 @@ const expdescription = document.querySelector('#description');
 const expcategory = document.querySelector('#categories');
 
 forms.addEventListener('submit', formInput);
-function formInput(e) {
+
+async function formInput(e) {
     e.preventDefault();
     const amount = expense.value;
     const description = expdescription.value;
@@ -18,14 +19,15 @@ function formInput(e) {
         amount,
         description,
         category
+    };
+
+    try {
+        const res = await axios.post("https://crudcrud.com/api/945a3fcb5b384a05bc95eb2e348afde6/expenses", obj);
+        showFun(res.data);
+        clearInput();
+    } catch (err) {
+        console.log(err);
     }
-    axios.post("https://crudcrud.com/api/cbd2f78c52e84167963e9d767327ab2c/expenses", obj)
-        .then((res) => {
-            showFun(res.data);
-            clearInput();
-        }).catch((err) => {
-            console.log(err);
-        })
 }
 function showFun(obj) {
     const li = document.createElement('li');
@@ -52,28 +54,30 @@ function showFun(obj) {
     });
 }
 
-function deleteFunction(id) {
-    axios.delete(`https://crudcrud.com/api/cbd2f78c52e84167963e9d767327ab2c/expenses/${id}`)
-        .then((res) => {
-            console.log(res);
-        }).catch((err) => {
-            console.log(err);
-        })
-
+async function deleteFunction(id) {
+    try {
+        const res = await axios.delete(`https://crudcrud.com/api/945a3fcb5b384a05bc95eb2e348afde6/expenses/${id}`);
+        console.log(res);
+    } catch (err) {
+        console.log(err);
+    }
 }
 
-function editFunction(obj) {
+async function editFunction(obj) {
     const user = {
         amount: obj.amount,
         description: obj.description,
         category: obj.category
-    }
-    axios.post("https://crudcrud.com/api/cbd2f78c52e84167963e9d767327ab2c/expense", user)
-        .then((res) => {
+    };
 
-            show(res.data);
-            clearInput();
-        }).catch(err => console.log(err))
+    try {
+        const res = await axios.post("https://crudcrud.com/api/945a3fcb5b384a05bc95eb2e348afde6/expense", user);
+        show(res.data);
+        clearInput();
+    } catch (err) {
+        console.log(err);
+    }
+
     deleteFunction(obj._id);
 }
 
@@ -81,48 +85,50 @@ function show(user) {
     const l = document.createElement('li');
     l.className = 'li-item float-right my-2';
     l.appendChild(document.createTextNode(user.amount + " - " + user.description + " - " + user.category));
+
     const dltbtn = document.createElement('button');
     dltbtn.className = 'btn btn-danger mx-2 float-right delete';
     dltbtn.appendChild(document.createTextNode('X'));
     l.appendChild(dltbtn);
-    list2.appendChild(l);
-    dltbtn.addEventListener('click', () => {
 
-        axios.delete(`https://crudcrud.com/api/cbd2f78c52e84167963e9d767327ab2c/expense/${user._id}`)
-            .then((res) => {
-                console.log(res);
-            }).catch((err) => {
-                console.log(err);
-            })
+    list2.appendChild(l);
+
+    dltbtn.addEventListener('click', async () => {
         list2.removeChild(l);
-    })
+        try {
+            const res = await axios.delete(`https://crudcrud.com/api/945a3fcb5b384a05bc95eb2e348afde6/expense/${user._id}`);
+            console.log(res);
+
+        } catch (error) {
+            console.log(error.message);
+        }
+    });
 }
 
-window.addEventListener('DOMContentLoaded', () => {
-    axios.get("https://crudcrud.com/api/cbd2f78c52e84167963e9d767327ab2c/expense")
-        .then((res) => {
-            for (var i = 0; i < res.data.length; i++) {
-                show(res.data[i]);
-            }
-        }).catch((err) => {
-            console.log(err);
-        })
-})
+window.addEventListener('DOMContentLoaded', async () => {
+    try {
+        const res = await axios.get("https://crudcrud.com/api/945a3fcb5b384a05bc95eb2e348afde6/expense");
+        for (var i = 0; i < res.data.length; i++) {
+            show(res.data[i]);
+        }
+    } catch (err) {
+        console.log(err);
+    }
+});
 
-window.addEventListener('DOMContentLoaded', () => {
-    axios.get("https://crudcrud.com/api/cbd2f78c52e84167963e9d767327ab2c/expenses")
-        .then((res) => {
-            for (var i = 0; i < res.data.length; i++) {
-                showFun(res.data[i]);
-            }
-        }).catch((err) => {
-            console.log(err);
-        })
-})
+window.addEventListener('DOMContentLoaded', async () => {
+    try {
+        const res = await axios.get("https://crudcrud.com/api/945a3fcb5b384a05bc95eb2e348afde6/expenses");
+        for (var i = 0; i < res.data.length; i++) {
+            showFun(res.data[i]);
+        }
+    } catch (err) {
+        console.log(err);
+    }
+});
 
 function clearInput() {
     expense.value = '';
     expdescription.value = '';
     expcategory.value = '';
-    //submit.value = "Add ta"
 }
